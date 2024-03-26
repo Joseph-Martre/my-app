@@ -1,39 +1,50 @@
-import React, { Component } from 'react';
-import Car from './Cars';
-import Wrapper from './Wrapper';
-import MyHeader from './MyHeader';
+import { Component } from 'react'
+import Car from './Cars'
+import Welcome from './Welcome';
 
-class MyCars extends Component{
-    state = {
-        cars:["Ford","Mercedes","Peugeot"]
+class Mycars extends Component {
+    state={
+        voitures: [
+            {name:"Ford", color:"red", year:2000},
+            {name:"Mercedes", color:"black", year:2010},
+            {name:"Peugeot", color:"green", year:2018},
+        ]
     };
-    noCopy = ()=>{
-        alert("Merci de ne pas copier le texte.");
+    addTenYears = () => {
+        const updatedState = this.state.voitures.map((param)=>{
+            return (param.year -= 10);
+        });
+        this.setState({updatedState});
     };
-    addStyle = (e) => {
-        console.log(e.target);
-        if(e.target.classList.contains("styled")){
-            e.target.classList.remove("styled");
-        } else {
-            e.target.classList.add("styled");
-        }
-    };
-    render(){
-        return(
+    getAge = year => {
+        const now = new Date().getFullYear();
+        const age = now - year;
+        //ans ou an
+        return(age===1? `${age} an` : `${age} ans`);
+    }
+    render() {
+        return (
             <div>
-                <Wrapper>
-                    <MyHeader
-                    myStyle={this.props.color}
-                    >
-                        {this.props.title}
-                    </MyHeader>
-                </Wrapper>
-                <Car color="red">{this.state.cars[0]}</Car>
-                <Car color="black">{this.state.cars[1]}</Car>
-                <Car color="green">{this.state.cars[2]}</Car>
+                <h1>{this.props.title}</h1>
+                <button onClick={this.addTenYears}>+10 ans</button>
+                {
+                    this.state.voitures.map(({name,color,year},index)=>{
+                        return(
+                            <div key={index}>
+                                <Car
+                                    nom={name}
+                                    color={color}
+                                    year={this.getAge(year)}
+                                />
+                            </div>
+                        );
+                    })
+                }
+                <Welcome greeting={"Bonsoir"}/>
             </div>
+           
         )
     }
 }
 
-export default MyCars;
+export default Mycars
